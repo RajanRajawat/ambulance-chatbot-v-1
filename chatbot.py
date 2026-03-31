@@ -160,6 +160,6 @@ chatbot = RunnableWithMessageHistory(
     history_messages_key="chat_history"
 )
 
-def ask_bot(user_input: str, session_id: str = "default"):
+def ask_bot(user_input: str, session_id: str = "admin"):
     config = {"configurable": {"session_id": session_id}}
     return chatbot.invoke({"input": user_input}, config=config) # type: ignore
