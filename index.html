@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ambulance Chatbot</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+
+  <div class="w-full max-w-2xl bg-white shadow-xl rounded-2xl flex flex-col h-[80vh]">
+    
+    <!-- Header -->
+    <div class="p-4 border-b flex justify-between items-center">
+      <h1 class="text-xl font-semibold">Ambulance Chatbot</h1>
+      <input 
+        id="sessionId"
+        type="text" 
+        placeholder="session_id"
+        class="border rounded-lg px-2 py-1 text-sm outline-none"
+        value="rajan"
+      />
+    </div>
+
+    <!-- Chat Messages -->
+    <div id="chatBox" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
+
+    <!-- Input Area -->
+    <div class="p-4 border-t flex gap-2">
+      <input 
+        id="messageInput"
+        type="text" 
+        placeholder="Type your message..."
+        class="flex-1 border rounded-lg px-3 py-2 outline-none"
+      />
+      <button 
+        onclick="sendMessage()"
+        class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+      >Send</button>
+    </div>
+
+  </div>
+
+  <script>
+    const chatBox = document.getElementById("chatBox");
+
+    function addMessage(text, sender) {
+      const div = document.createElement("div");
+      div.className = `p-2 rounded-lg max-w-[70%] ${sender === 'user' ? 'bg-blue-100 ml-auto' : 'bg-gray-200'}`;
+      div.innerText = text;
+      chatBox.appendChild(div);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById("messageInput");
+      const sessionId = document.getElementById("sessionId").value || "default";
+      const message = input.value.trim();
+
+      if (!message) return;
+
+      addMessage(message, "user");
+      input.value = "";
+
+      try {
+        const response = await fetch("http://localhost:8000/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            message: message,
+            session_id: sessionId
+          })
+        });
+
+        const data = await response.json();
+        addMessage(data.response || "No response", "bot");
+      } catch (error) {
+        addMessage("Error connecting to server", "bot");
+      }
+    }
+
+    // Send message on Enter key
+    document.getElementById("messageInput").addEventListener("keypress", function (e) {
+      if (e.key === "Enter") {
+        sendMessage();
+      }
+    });
+  </script>
+
+</body>
+</html>
