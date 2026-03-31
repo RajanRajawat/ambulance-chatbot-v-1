@@ -1,0 +1,1 @@
+If RAG is needed in future, we can use this directory to ingest text data.

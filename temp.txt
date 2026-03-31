@@ -1,0 +1,17 @@
+> Create a Chat bot for Ambulance project.
+
+> For now, the chatbot will only assist with basic amublance FAQ, types of ambulance etc,  cure of basic illness,
+
+
+
+
+
+
+
+
+
+
+
+#> To do for later:
+fix session Id : once the backend if built
+rag is not needed right now, so for now just build one simple llm based, faq chatbot
